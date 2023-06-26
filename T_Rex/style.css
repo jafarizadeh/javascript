@@ -13,6 +13,16 @@
     /* animation-duration: 1.7s; */
 }
 
+#dinosaur {
+    width: 130px;
+    height: 100px;
+    background-image: url("img/t-rex.png");
+    background-size: 150px auto;
+    position: relative;
+    top: 280px;
+    left: 50px;
+}
+
 @keyframes move-sc {
     0%{
         background-position: 600px 0;
