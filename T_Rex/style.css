@@ -23,7 +23,7 @@
   background-image: url("img/bg2.jpg");
   background-size: 600px auto;
   animation: move-sc infinite linear;
-  /* animation-duration: 1.7s; */
+  animation-duration: 1.7s;
 }
 
 #dinosaur {
@@ -47,7 +47,7 @@
   top: 130px;
   left: 600px;
   animation: cactus-move infinite linear;
-  /* animation-duration:  1.75s; */
+  animation-duration:  1.75s;
 }
 
 .jump {
