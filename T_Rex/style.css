@@ -1,0 +1,83 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+#box-point{
+    position: relative;
+    width: 120px;
+    height: 20px;
+    top: 10px;
+    left: 20px;
+    background-color: darkolivegreen;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+#game {
+  width: 600px;
+  height: 350px;
+  border: 1px solid #000;
+  margin: 0 auto;
+  background-image: url("img/bg2.jpg");
+  background-size: 600px auto;
+  animation: move-sc infinite linear;
+  animation-duration: 1.7s;
+}
+
+#dinosaur {
+  width: 130px;
+  height: 100px;
+  background-image: url("img/t-rex.png");
+  background-size: 150px auto;
+  background-repeat: no-repeat;
+  position: relative;
+  top: 190px;
+  left: 50px;
+}
+
+#cactus {
+  width: 39px;
+  height: 60px;
+  background-image: url("img/cactus.png");
+  background-size: auto 60px;
+  background-repeat: no-repeat;
+  position: relative;
+  top: 130px;
+  left: 600px;
+  animation: cactus-move infinite linear;
+  animation-duration:  1.75s;
+}
+
+.jump {
+  animation: jump 0.3s infinite;
+  animation-direction: alternate;
+}
+
+@keyframes move-sc {
+  0% {
+    background-position: 600px 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+@keyframes cactus-move {
+  0% {
+    left: 600px;
+  }
+  100% {
+    left: -20px;
+  }
+}
+
+@keyframes jump {
+  0% {
+    top: 170px;
+  }
+  100% {
+    top: 100px;
+  }
+}
