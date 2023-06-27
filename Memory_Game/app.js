@@ -48,3 +48,13 @@ const cardArray = [
     img: "img/pizza.png",
   },
 ];
+
+cardArray.sort(() => 0.5 - Math.random());
+
+const gridDisplay = document.querySelector("#grid");
+
+function createBorder() {
+  for (let i = 0; i < 10; i++) {
+    
+  }
+}
