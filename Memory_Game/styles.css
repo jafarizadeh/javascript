@@ -4,3 +4,9 @@
   display: flex;
   flex-wrap: wrap;
 }
+
+.card {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}

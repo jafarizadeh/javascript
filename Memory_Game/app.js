@@ -53,13 +53,20 @@ cardArray.sort(() => 0.5 - Math.random());
 
 const gridDisplay = document.querySelector("#grid");
 
+createBorder();
+
 function createBorder() {
   for (let i = 0; i < cardArray.length; i++) {
     const card = document.createElement("img");
-    card.setAttribute("src", "img/white.png");
+    card.setAttribute("src", "img/bg.png");
     card.setAttribute("data_id", i);
+    card.classList.add("card");
+    card.addEventListener("click", flipCard);
     gridDisplay.appendChild(card);
   }
 }
 
-createBorder();
+function flipCard() {
+  const cardId = this.getAttribute("data_id");
+  console.log("102", cardId);
+}
