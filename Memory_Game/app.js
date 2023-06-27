@@ -54,7 +54,12 @@ cardArray.sort(() => 0.5 - Math.random());
 const gridDisplay = document.querySelector("#grid");
 
 function createBorder() {
-  for (let i = 0; i < 10; i++) {
-    
+  for (let i = 0; i < cardArray.length; i++) {
+    const card = document.createElement("img");
+    card.setAttribute("src", "img/white.png");
+    card.setAttribute("data_id", i);
+    gridDisplay.appendChild(card);
   }
 }
+
+createBorder();
