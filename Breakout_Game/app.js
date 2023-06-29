@@ -109,7 +109,10 @@ timerId = setInterval(moveBall, 30);
 
 // check for collisions
 function checkForCollisions() {
-
+  // check for block collisions
+  for(let i = 0; i < blocks.length; i++){
+    
+  }
 
   // check for wall collisions
   if (
