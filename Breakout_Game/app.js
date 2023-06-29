@@ -12,6 +12,7 @@ const ballStart = [270, 30];
 let ballCurrentPosition = ballStart;
 let xDirection = -8;
 let yDirection = 4;
+let score = 0;
 
 // create Block
 class Block {
@@ -121,6 +122,14 @@ function checkForCollisions() {
       allBlocks[i].classList.remove("block");
       blocks.splice(i, 1);
       changeDirection("y");
+      score++;
+      scoreDisplay.innerHTML = score;
+
+      // check for win
+      if (blocks.length === 0) {
+        scoreDisplay.innerHTML = "YOU WIN";
+        clearInterval(timerId);
+      }
     }
   }
 
