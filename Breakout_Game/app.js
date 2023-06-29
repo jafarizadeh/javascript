@@ -1,4 +1,5 @@
 const grid = document.querySelector(".grid");
+const scoreDisplay = document.querySelector("#score");
 const blockWidth = 100;
 const blockHeight = 20;
 const boardWidth = 560;
@@ -108,6 +109,8 @@ timerId = setInterval(moveBall, 30);
 
 // check for collisions
 function checkForCollisions() {
+
+
   // check for wall collisions
   if (
     ballCurrentPosition[0] > boardWidth - ballDiameter ||
@@ -125,11 +128,10 @@ function checkForCollisions() {
     ) {
       changeDirection("y");
     } else {
-      console.log(ballCurrentPosition[0], currentPosition[0]);
       gameOver();
     }
   }
-  if (ballCurrentPosition[1] === 0) {
+  if (ballCurrentPosition[1] <= 0) {
     gameOver();
   }
 }
@@ -146,5 +148,6 @@ function changeDirection(d) {
 }
 
 function gameOver() {
-  alert("GAME OVER");
+  clearInterval(timerId);
+  scoreDisplay.innerHTML = "GAME OVER";
 }
