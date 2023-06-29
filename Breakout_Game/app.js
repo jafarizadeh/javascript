@@ -61,12 +61,16 @@ function drawUser() {
 function moveUser(e) {
   switch (e.key) {
     case "ArrowLeft":
-      currentPosition[0] -= 20;
-      drawUser();
+      if (currentPosition[0] > 10) {
+        currentPosition[0] -= 20;
+        drawUser();
+      }
       break;
     case "ArrowRight":
-      currentPosition[0] += 20;
-      drawUser();
+      if (currentPosition[0] < 440) {
+        currentPosition[0] += 20;
+        drawUser();
+      }
       break;
   }
 }
