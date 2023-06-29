@@ -1,10 +1,16 @@
 const grid = document.querySelector(".grid");
 const blockWidth = 100;
 const blockHeight = 20;
+const boardWidth = 560;
+const boardHeight = 300;
+const ballDiameter = 20;
+let timerId;
 const userStart = [230, 10];
 let currentPosition = userStart;
 const ballStart = [270, 30];
 let ballCurrentPosition = ballStart;
+let xDirection = -8;
+let yDirection = 4;
 
 // create Block
 class Block {
@@ -92,9 +98,53 @@ grid.appendChild(ball);
 
 //move ball
 function moveBall() {
-  ballCurrentPosition[0] += 2;
-  ballCurrentPosition[1] += 2;
+  ballCurrentPosition[0] += xDirection;
+  ballCurrentPosition[1] += yDirection;
   drawBall();
+  checkForCollisions();
 }
 
-setInterval(moveBall, 30);
+timerId = setInterval(moveBall, 30);
+
+// check for collisions
+function checkForCollisions() {
+  // check for wall collisions
+  if (
+    ballCurrentPosition[0] > boardWidth - ballDiameter ||
+    ballCurrentPosition[0] < 0
+  ) {
+    changeDirection("x");
+  }
+  if (ballCurrentPosition[1] > boardHeight - ballDiameter) {
+    changeDirection("y");
+  }
+  if (ballCurrentPosition[1] === currentPosition[1] + ballDiameter) {
+    if (
+      ballCurrentPosition[0] > currentPosition[0] - ballDiameter &&
+      ballCurrentPosition[0] < currentPosition[0] + 100
+    ) {
+      changeDirection("y");
+    } else {
+      console.log(ballCurrentPosition[0], currentPosition[0]);
+      gameOver();
+    }
+  }
+  if (ballCurrentPosition[1] === 0) {
+    gameOver();
+  }
+}
+
+function changeDirection(d) {
+  switch (d) {
+    case "x":
+      xDirection *= -1;
+      break;
+    case "y":
+      yDirection *= -1;
+      break;
+  }
+}
+
+function gameOver() {
+  alert("GAME OVER");
+}
