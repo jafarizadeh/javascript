@@ -14,13 +14,13 @@ function moveFrog(e) {
       if (currentIndex % width !== 0) currentIndex -= 1;
       break;
     case "ArrowRight":
-      if (currentIndex % width !== 8) currentIndex += 1;
+      if (currentIndex % width !== width - 1) currentIndex += 1;
       break;
     case "ArrowUp":
-      if (currentIndex > 8) currentIndex -= width;
+      if (currentIndex - width >= 0) currentIndex -= width;
       break;
     case "ArrowDown":
-      if (currentIndex < 72) currentIndex += width;
+      if (currentIndex + width < width * width) currentIndex += width;
 
       break;
   }
