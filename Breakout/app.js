@@ -93,6 +93,15 @@ function update() {
   for (let i = 0; i < blockArray.length; i++) {
     let block = blockArray[i];
     if (!block.break) {
+      if (topCollision(ball, block) || bottomCollision(ball, block)) {
+        block.break = true;
+        ball.velocityY *= -1;
+        blockCount -= 1;
+      } else if (leftCollision(ball, block) || rightCollision(ball, block)) {
+        block.break = true;
+        ball.velocityX *= -1;
+        blockCount -= 1;
+      }
       context.fillRect(block.x, block.y, block.width, block.height);
     }
   }
