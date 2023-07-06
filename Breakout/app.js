@@ -32,6 +32,19 @@ let ball = {
   velocityY: ballVelocityY,
 };
 
+// blocks
+let blockArray = [];
+let blockWith = 50;
+let blockHeight = 10;
+let blockColumns = 8;
+let blockRows = 3;
+let blockMaxRows = 10;
+let blockCount = 0;
+
+//starting block corner top left
+let blockX = 15;
+let blockY = 45;
+
 window.onload = function () {
   board = document.getElementById("board");
   board.height = boardHeight;
@@ -44,6 +57,9 @@ window.onload = function () {
 
   requestAnimationFrame(update);
   document.addEventListener("keydown", movePlayer);
+
+  //create blocks
+  createBlocks();
 };
 
 function update() {
@@ -71,6 +87,15 @@ function update() {
     // if ball touches bottom of canvas
     // game over
   }
+
+  //blocks
+  context.fillStyle = "skyblue";
+  for (let i = 0; i < blockArray.length; i++) {
+    let block = blockArray[i];
+    if (!block.break) {
+      context.fillRect(block.x, block.y, block.width, block.height);
+    }
+  }
 }
 
 function outPlayer(xPosition) {
@@ -93,6 +118,7 @@ function movePlayer(e) {
   }
   // bounce the ball off player paddle
   if (topCollision(ball, player)) {
+    console.log("xxx");
     ball.velocityY *= -1;
   } else if (leftCollision(ball, player) || rightCollision(ball, player)) {
     ball.velocityX *= -1;
@@ -123,4 +149,21 @@ function leftCollision(ball, block) {
 
 function rightCollision(ball, block) {
   return detectCollision(ball, block) && block.x + block.width >= ball.x;
+}
+
+function createBlocks() {
+  blockArray = []; // clear blockArray
+  for (let c = 0; c < blockColumns; c++) {
+    for (let r = 0; r < blockRows; r++) {
+      let block = {
+        x: blockX + c * blockWith + c * 10,
+        y: blockY + r * blockHeight + r * 10,
+        width: blockWith,
+        height: blockHeight,
+        break: false,
+      };
+      blockArray.push(block);
+    }
+  }
+  blockCount = blockArray.length;
 }
