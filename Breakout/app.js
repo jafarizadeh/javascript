@@ -45,6 +45,8 @@ let blockCount = 0;
 let blockX = 15;
 let blockY = 45;
 
+let score = 0;
+
 window.onload = function () {
   board = document.getElementById("board");
   board.height = boardHeight;
@@ -87,6 +89,13 @@ function update() {
     // if ball touches bottom of canvas
     // game over
   }
+  // bounce the ball off player paddle
+  if (topCollision(ball, player)) {
+    console.log("xxx");
+    ball.velocityY *= -1;
+  } else if (leftCollision(ball, player) || rightCollision(ball, player)) {
+    ball.velocityX *= -1;
+  }
 
   //blocks
   context.fillStyle = "skyblue";
@@ -124,13 +133,6 @@ function movePlayer(e) {
     if (!outPlayer(nextPlayerX)) {
       player.x = nextPlayerX;
     }
-  }
-  // bounce the ball off player paddle
-  if (topCollision(ball, player)) {
-    console.log("xxx");
-    ball.velocityY *= -1;
-  } else if (leftCollision(ball, player) || rightCollision(ball, player)) {
-    ball.velocityX *= -1;
   }
 }
 
