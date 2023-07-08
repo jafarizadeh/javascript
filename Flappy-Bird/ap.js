@@ -73,7 +73,7 @@ function update() {
 
   // bird
   velocityY += gravity;
-  //   bird.y += velocityY;
+  // bird.y += velocityY;
   bird.y = Math.max(bird.y + velocityY, 0); // apply gravity to current bird.y, limit the bird.y to top of the canvas
   context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
   if (bird.y > board.height) {
