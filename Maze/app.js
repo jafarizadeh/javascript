@@ -10,6 +10,9 @@ tileH = 20;
 tileRowCount = 25;
 tileColumnCount = 40;
 
+boundX = 0;
+boundY = 0;
+
 var tiles = [];
 for (c = 0; c < tileColumnCount; c++) {
   tiles[c] = [];
@@ -69,10 +72,14 @@ function myMove(e) {
         r * (tileH + 3) < y &&
         y < r * (tileH + 3) + tileH
       ) {
-        if (tiles[c][r].state == "e") {
+        if (tiles[c][r].state == "e" && (c != boundX || r != boundY)) {
           tiles[c][r].state = "w";
-        } else if (tiles[c][r].state == "w") {
+          boundX = c;
+          boundY = r;
+        } else if (tiles[c][r].state == "w" && (c != boundX || r != boundY)) {
           tiles[c][r].state = "e";
+          boundX = c;
+          boundY = r;
         }
       }
     }
@@ -94,8 +101,12 @@ function myDown(e) {
       ) {
         if (tiles[c][r].state == "e") {
           tiles[c][r].state = "w";
+          boundX = c;
+          boundY = r;
         } else if (tiles[c][r].state == "w") {
           tiles[c][r].state = "e";
+          boundX = c;
+          boundY = r;
         }
       }
     }
