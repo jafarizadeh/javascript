@@ -3,7 +3,7 @@ var board = [];
 var rows = 9;
 var columns = 9;
 var score = 0;
-let turns = 20;
+let turns = 5;
 
 var currTile;
 var otherTile;
@@ -109,6 +109,7 @@ function crushCandy() {
   crushThree();
   document.getElementById("scoreSpan").innerText = score;
   document.getElementById("turnsSpan").innerText = turns;
+  checkGameOver();
 }
 
 function crushThree() {
@@ -206,5 +207,12 @@ function generateCandy() {
     if (board[0][c].src.includes("blank")) {
       board[0][c].src = "./images/" + randomCandy() + ".png";
     }
+  }
+}
+
+function checkGameOver() {
+  if (turns === 0) {
+    document.getElementById("gameOverWindow").classList.remove("hidden");
+    document.getElementById("finalScoreSpan").innerText = score;
   }
 }
