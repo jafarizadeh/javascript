@@ -106,7 +106,7 @@ function crushCandy() {
   //crushFive();
   //crushFour();
   crushThree();
-  document.getElementById("score").innerText = score;
+  document.getElementById("scoreSpan").innerText = score;
 }
 
 function crushThree() {
