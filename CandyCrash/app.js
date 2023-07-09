@@ -3,6 +3,7 @@ var board = [];
 var rows = 9;
 var columns = 9;
 var score = 0;
+let turns = 20;
 
 var currTile;
 var otherTile;
@@ -107,6 +108,7 @@ function crushCandy() {
   //crushFour();
   crushThree();
   document.getElementById("scoreSpan").innerText = score;
+  document.getElementById("turnsSpan").innerText = turns;
 }
 
 function crushThree() {
@@ -160,6 +162,7 @@ function checkValid() {
         candy2.src == candy3.src &&
         !candy1.src.includes("blank")
       ) {
+        turns--;
         return true;
       }
     }
@@ -175,6 +178,7 @@ function checkValid() {
         candy2.src == candy3.src &&
         !candy1.src.includes("blank")
       ) {
+        turns--;
         return true;
       }
     }
