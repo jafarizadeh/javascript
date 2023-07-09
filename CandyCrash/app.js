@@ -61,8 +61,26 @@ function dragDrop() {
 }
 
 function dragEnd() {
-  let currImg = currTile.src;
-  let otherImg = otherTile.src;
-  currTile.src = otherImg;
-  otherTile.src = currImg;
+  let currCoords = currTile.id.split("-"); // id = "0-0" -> ["0", "0"]
+  let r = Number(currCoords[0]);
+  let c = Number(currCoords[1]);
+
+  let otherCoords = otherTile.id.split("-");
+  let r2 = Number(otherCoords[0]);
+  let c2 = Number(otherCoords[1]);
+
+  let moveLeft = c2 == c - 1 && r2 == r;
+  let moveRight = c2 == c + 1 && r2 == r;
+
+  let moveUp = r2 == r - 1 && c2 == c;
+  let moveDown = r2 == r + 1 && c2 == c;
+
+  let isValidPosition = moveLeft || moveRight || moveUp || moveDown;
+
+  if (isValidPosition) {
+    let currImg = currTile.src;
+    let otherImg = otherTile.src;
+    currTile.src = otherImg;
+    otherTile.src = currImg;
+  }
 }
