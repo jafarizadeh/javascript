@@ -3,6 +3,12 @@ var board = [];
 var rows = 9;
 var columns = 9;
 var score = 0;
+var score3 = false;
+var point3 = false;
+var score4 = false;
+var point4 = false;
+var score5 = false;
+var point5 = false;
 let turns = 2;
 
 var currTile;
@@ -94,27 +100,140 @@ function dragEnd() {
     currTile.src = otherImg;
     otherTile.src = currImg;
     let validMove = checkValid();
+
     if (!validMove) {
+      console.log(`validMove is : ${validMove}`);
+
       let currImg = currTile.src;
       let otherImg = otherTile.src;
       currTile.src = otherImg;
       otherTile.src = currImg;
+      validMove = true;
     } else {
-      score += 30;
+      if (point3) {
+        score += 30;
+        point3 = false;
+      } else if (point4) {
+        score += 40;
+        point4 = false;
+      } else if (point5) {
+        score += 50;
+        point5 = false;
+      }
     }
   }
 }
 
 function crushCandy() {
-  //crushFive();
-  //crushFour();
-  crushThree();
+  crushFive();
+  //   crushFour();
+  //   crushThree();
+
   document.getElementById("scoreSpan").innerText = score;
   document.getElementById("turnsSpan").innerText = turns;
   checkGameOver();
 }
 
+function crushFive() {
+  score5 = true;
+  //check rows
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < columns - 4; c++) {
+      let candy1 = board[r][c];
+      let candy2 = board[r][c + 1];
+      let candy3 = board[r][c + 2];
+      let candy4 = board[r][c + 3];
+      let candy5 = board[r][c + 4];
+      if (
+        candy1.src == candy2.src &&
+        candy2.src == candy3.src &&
+        candy3.src == candy4.src &&
+        candy4.src == candy5.src &&
+        !candy1.src.includes("blank")
+      ) {
+        candy1.src = "./images/blank.png";
+        candy2.src = "./images/blank.png";
+        candy3.src = "./images/blank.png";
+        candy4.src = "./images/blank.png";
+        candy5.src = "./images/blank.png";
+      }
+    }
+  }
+  //check columns
+  for (let c = 0; c < columns; c++) {
+    for (let r = 0; r < rows - 4; r++) {
+      let candy1 = board[r][c];
+      let candy2 = board[r + 1][c];
+      let candy3 = board[r + 2][c];
+      let candy4 = board[r + 3][c];
+      let candy5 = board[r + 4][c];
+      if (
+        candy1.src == candy2.src &&
+        candy2.src == candy3.src &&
+        candy3.src == candy4.src &&
+        candy4.src == candy5.src &&
+        !candy1.src.includes("blank")
+      ) {
+        candy1.src = "./images/blank.png";
+        candy2.src = "./images/blank.png";
+        candy3.src = "./images/blank.png";
+        candy4.src = "./images/blank.png";
+        candy5.src = "./images/blank.png";
+      }
+    }
+  }
+  console.log(`fin candy5 score 5 is : ${score5}`);
+  crushFour();
+}
+
+function crushFour() {
+  score4 = true;
+  //check rows
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < columns - 3; c++) {
+      let candy1 = board[r][c];
+      let candy2 = board[r][c + 1];
+      let candy3 = board[r][c + 2];
+      let candy4 = board[r][c + 3];
+      if (
+        candy1.src == candy2.src &&
+        candy2.src == candy3.src &&
+        candy3.src == candy4.src &&
+        !candy1.src.includes("blank")
+      ) {
+        candy1.src = "./images/blank.png";
+        candy2.src = "./images/blank.png";
+        candy3.src = "./images/blank.png";
+        candy4.src = "./images/blank.png";
+      }
+    }
+  }
+  //check columns
+  for (let c = 0; c < columns; c++) {
+    for (let r = 0; r < rows - 3; r++) {
+      let candy1 = board[r][c];
+      let candy2 = board[r + 1][c];
+      let candy3 = board[r + 2][c];
+      let candy4 = board[r + 3][c];
+      if (
+        candy1.src == candy2.src &&
+        candy2.src == candy3.src &&
+        candy3.src == candy4.src &&
+        !candy1.src.includes("blank")
+      ) {
+        candy1.src = "./images/blank.png";
+        candy2.src = "./images/blank.png";
+        candy3.src = "./images/blank.png";
+        candy4.src = "./images/blank.png";
+      }
+    }
+  }
+  console.log(`fin candy4 score 4 is : ${score4}`);
+  crushThree();
+}
+
 function crushThree() {
+  score3 = true;
   //check rows
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < columns - 2; c++) {
@@ -129,7 +248,6 @@ function crushThree() {
         candy1.src = "./images/blank.png";
         candy2.src = "./images/blank.png";
         candy3.src = "./images/blank.png";
-        // score += 30;
       }
     }
   }
@@ -147,45 +265,150 @@ function crushThree() {
         candy1.src = "./images/blank.png";
         candy2.src = "./images/blank.png";
         candy3.src = "./images/blank.png";
-        // score += 30;
       }
     }
   }
+  //   console.log(`fin crush 3. score 3 is ${score3}`);
 }
 
 function checkValid() {
-  //check rows
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < columns - 2; c++) {
-      let candy1 = board[r][c];
-      let candy2 = board[r][c + 1];
-      let candy3 = board[r][c + 2];
-      if (
-        candy1.src == candy2.src &&
-        candy2.src == candy3.src &&
-        !candy1.src.includes("blank")
-      ) {
-        turns--;
-        return true;
+  if (score5) {
+    console.log(`SCORE 5 in debut valid is ${score5}`);
+    //check rows
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < columns - 4; c++) {
+        let candy1 = board[r][c];
+        let candy2 = board[r][c + 1];
+        let candy3 = board[r][c + 2];
+        let candy4 = board[r][c + 3];
+        let candy5 = board[r][c + 4];
+        if (
+          candy1.src == candy2.src &&
+          candy2.src == candy3.src &&
+          candy3.src == candy4.src &&
+          candy4.src == candy5.src &&
+          !candy1.src.includes("blank")
+        ) {
+          turns--;
+          point5 = true;
+          console.log(`point 5 in valid is ${point5}`);
+          return true;
+        }
       }
     }
-  }
-  //check columns
-  for (let c = 0; c < columns; c++) {
-    for (let r = 0; r < rows - 2; r++) {
-      let candy1 = board[r][c];
-      let candy2 = board[r + 1][c];
-      let candy3 = board[r + 2][c];
-      if (
-        candy1.src == candy2.src &&
-        candy2.src == candy3.src &&
-        !candy1.src.includes("blank")
-      ) {
-        turns--;
-        return true;
+    //check columns
+    for (let c = 0; c < columns; c++) {
+      for (let r = 0; r < rows - 4; r++) {
+        let candy1 = board[r][c];
+        let candy2 = board[r + 1][c];
+        let candy3 = board[r + 2][c];
+        let candy4 = board[r + 3][c];
+        let candy5 = board[r + 4][c];
+        if (
+          candy1.src == candy2.src &&
+          candy2.src == candy3.src &&
+          candy3.src == candy4.src &&
+          candy4.src == candy5.src &&
+          !candy1.src.includes("blank")
+        ) {
+          turns--;
+          point5 = true;
+          console.log(`point 5 in valid is ${point5}`);
+          return true;
+        }
       }
     }
+    score5 = false;
+    console.log(`SCORE 5 in fin valid is ${score5} and SCORE 3 is ${score4}`);
   }
+  if (score4) {
+    console.log(`SCORE 4 in debut valid is ${score4}`);
+    //check rows
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < columns - 3; c++) {
+        let candy1 = board[r][c];
+        let candy2 = board[r][c + 1];
+        let candy3 = board[r][c + 2];
+        let candy4 = board[r][c + 3];
+        if (
+          candy1.src == candy2.src &&
+          candy2.src == candy3.src &&
+          candy3.src == candy4.src &&
+          !candy1.src.includes("blank")
+        ) {
+          turns--;
+          point4 = true;
+          console.log(`point 4 in valid is ${point4}`);
+          return true;
+        }
+      }
+    }
+    //check columns
+    for (let c = 0; c < columns; c++) {
+      for (let r = 0; r < rows - 3; r++) {
+        let candy1 = board[r][c];
+        let candy2 = board[r + 1][c];
+        let candy3 = board[r + 2][c];
+        let candy4 = board[r + 3][c];
+        if (
+          candy1.src == candy2.src &&
+          candy2.src == candy3.src &&
+          candy3.src == candy4.src &&
+          !candy1.src.includes("blank")
+        ) {
+          turns--;
+          point4 = true;
+          console.log(`point 4 in valid is ${point4}`);
+          return true;
+        }
+      }
+    }
+    score4 = false;
+    console.log(`SCORE 4 in fin valid is ${score4} and SCORE 3 is ${score3}`);
+  }
+  if (score3) {
+    console.log(`SCORE 3 in debut valid is ${score3}`);
+
+    //check rows
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < columns - 2; c++) {
+        let candy1 = board[r][c];
+        let candy2 = board[r][c + 1];
+        let candy3 = board[r][c + 2];
+        if (
+          candy1.src == candy2.src &&
+          candy2.src == candy3.src &&
+          !candy1.src.includes("blank")
+        ) {
+          turns--;
+          point3 = true;
+          console.log(`point 3 in valid is ${point3}`);
+          return true;
+        }
+      }
+    }
+    //check columns
+    for (let c = 0; c < columns; c++) {
+      for (let r = 0; r < rows - 2; r++) {
+        let candy1 = board[r][c];
+        let candy2 = board[r + 1][c];
+        let candy3 = board[r + 2][c];
+        if (
+          candy1.src == candy2.src &&
+          candy2.src == candy3.src &&
+          !candy1.src.includes("blank")
+        ) {
+          turns--;
+          point3 = true;
+          console.log(`point 3 in valid is ${point3}`);
+          return true;
+        }
+      }
+    }
+    score3 = false;
+    console.log(`SCORE 3 in fin valid is ${score3}`);
+  }
+  console.log("return false in check valid");
   return false;
 }
 
@@ -225,8 +448,6 @@ function checkGameOver() {
 }
 
 function resetGame() {
-  score = 0;
-  turns = 2;
   document.getElementById("gameOverWindow").classList.add("hidden");
   location.reload();
 }
