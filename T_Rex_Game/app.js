@@ -39,6 +39,13 @@ let velocityY = 0;
 let gravity = 0.4;
 
 let gameOver = false;
+let gameOverImg;
+let gameOverWidth = 386;
+let gameOverHeight = 40;
+let gameOverX = boardWidth / 2 - gameOverWidth / 2;
+let gameOverY = boardHeight / 2 - gameOverHeight / 2;
+
+let resetImg;
 let score = 0;
 
 window.onload = function () {
@@ -65,6 +72,12 @@ window.onload = function () {
 
   cactus3Img = new Image();
   cactus3Img.src = "./img/cactus3.png";
+
+  gameOverImg = new Image();
+  gameOverImg.src = "./img/game-over.png";
+
+  resetImg = new Image();
+  resetImg.src = "./img/reset.png";
 
   requestAnimationFrame(update);
   setInterval(placeCactus, 1000);
@@ -101,6 +114,16 @@ function update() {
       dinoImg.src = "./img/dino-dead.png";
       dinoImg.onload = function () {
         context.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
+      };
+      gameOverImg.src = "./img/game-over.png";
+      gameOverImg.onload = function () {
+        context.drawImage(
+          gameOverImg,
+          gameOverX,
+          gameOverY,
+          gameOverWidth,
+          gameOverHeight
+        );
       };
     }
   }
