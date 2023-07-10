@@ -18,6 +18,22 @@ let dino = {
   height: dinoHeight,
 };
 
+let dinoDuck1Width = 116;
+let dinoDuck2Width = 118;
+let dinoDuckHeight = 60;
+let dinoDuckX = 75;
+let dinoDuckY = boardHeight - dinoDuckHeight;
+let dinoDuck1Img;
+let dinoDuck2Img;
+
+let dinoDuck = {
+  x: dinoDuckX,
+  y: dinoDuckY,
+  width1: dinoDuck1Width,
+  width2: dinoDuck2Width,
+  height: dinoDuckHeight,
+};
+
 //bird
 let birdArray = [];
 
@@ -86,6 +102,8 @@ let resetImgY = boardHeight / 2 + gameOverHeight;
 
 let score = 0;
 
+let shiftPressed = false;
+
 window.onload = function () {
   board = document.getElementById("board");
   board.height = boardHeight;
@@ -104,8 +122,35 @@ window.onload = function () {
 
   dinoImg = new Image();
   dinoImg.src = "./img/dino.png";
+
   dinoImg.onload = function () {
     context.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
+  };
+
+  dinoDuck1Img = new Image();
+  dinoDuck1Img.src = "./img/dino-duck1.png";
+
+  dinoDuck1Img.onload = function () {
+    context.drawImage(
+      dinoDuck1Img,
+      dinoDuck.x,
+      dinoDuck.y,
+      dinoDuck.width1,
+      dinoDuck.height
+    );
+  };
+
+  dinoDuck2Img = new Image();
+  dinoDuck2Img.src = "./img/dino-duck2.png";
+
+  dinoDuck2Img.onload = function () {
+    context.drawImage(
+      dinoDuck2Img,
+      dinoDuck.x,
+      dinoDuck.y,
+      dinoDuck.width2,
+      dinoDuck.height
+    );
   };
 
   cactus1Img = new Image();
@@ -140,7 +185,11 @@ window.onload = function () {
   setInterval(placeCloud, 1000);
   setInterval(placeBird, 1000);
 
+  // Listen for keydown events
   document.addEventListener("keydown", moveDino);
+
+  // Listen for keyup events
+  document.addEventListener("keyup", moveDino);
 
   board.addEventListener("click", function (e) {
     // Calculate the canvas-relative coordinates of the click
@@ -192,10 +241,21 @@ function update() {
 
   context.clearRect(0, 0, board.width, board.height);
 
-  //dino
-  velocityY += gravity;
-  dino.y = Math.min(dino.y + velocityY, dinoY);
-  context.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
+  // Draw the dino
+  if (shiftPressed) {
+    // You'll need to implement tracking of Shift key state
+    context.drawImage(
+      dinoDuck1Img,
+      dinoDuck.x,
+      dinoDuck.y,
+      dinoDuck.width1,
+      dinoDuck.height
+    );
+  } else {
+    velocityY += gravity;
+    dino.y = Math.min(dino.y + velocityY, dinoY);
+    context.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
+  }
 
   //cactus
   for (let i = 0; i < cactusArray.length; i++) {
@@ -239,12 +299,12 @@ function update() {
     }
   }
 
-  //bird
-  // for (let i = 0; i < birdArray.length; i++) {
-  //   let bird = birdArray[i];
-  //   bird.x += velocityX;
-  //   context.drawImage(bird.img, bird.x, bird.y, bird.width, bird.height);
-  // }
+  // bird;
+  for (let i = 0; i < birdArray.length; i++) {
+    let bird = birdArray[i];
+    bird.x += velocityX;
+    context.drawImage(bird.img, bird.x, bird.y, bird.width, bird.height);
+  }
 
   for (let i = 0; i < birdArray.length; i++) {
     let bird = birdArray[i];
@@ -283,9 +343,11 @@ function moveDino(e) {
     return;
   }
 
-  // if ((e.code == "Space" || e.code == "ArrowUp") && dino.y == dinoY) {
-  //   velocityY = -10;
-  // }
+  // Track the state of the Shift key
+  if (e.code == "ShiftLeft" || e.code == "ShiftRight") {
+    shiftPressed = e.type == "keydown";
+    console.log(shiftPressed);
+  }
 
   if ((e.code == "Space" || e.code == "ArrowUp") && dino.y == dinoY) {
     // If Shift is also pressed, make the dino jump higher
