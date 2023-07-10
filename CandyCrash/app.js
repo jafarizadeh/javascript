@@ -9,7 +9,7 @@ var score4 = false;
 var point4 = false;
 var score5 = false;
 var point5 = false;
-let turns = 2;
+let turns = 20;
 
 var currTile;
 var otherTile;
