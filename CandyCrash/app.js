@@ -3,7 +3,7 @@ var board = [];
 var rows = 9;
 var columns = 9;
 var score = 0;
-let turns = 5;
+let turns = 2;
 
 var currTile;
 var otherTile;
@@ -99,6 +99,8 @@ function dragEnd() {
       let otherImg = otherTile.src;
       currTile.src = otherImg;
       otherTile.src = currImg;
+    } else {
+      score += 30;
     }
   }
 }
@@ -127,7 +129,7 @@ function crushThree() {
         candy1.src = "./images/blank.png";
         candy2.src = "./images/blank.png";
         candy3.src = "./images/blank.png";
-        score += 30;
+        // score += 30;
       }
     }
   }
@@ -145,7 +147,7 @@ function crushThree() {
         candy1.src = "./images/blank.png";
         candy2.src = "./images/blank.png";
         candy3.src = "./images/blank.png";
-        score += 30;
+        // score += 30;
       }
     }
   }
@@ -214,5 +216,17 @@ function checkGameOver() {
   if (turns === 0) {
     document.getElementById("gameOverWindow").classList.remove("hidden");
     document.getElementById("finalScoreSpan").innerText = score;
+    document.addEventListener("keydown", function (event) {
+      if (event.code === "Space") {
+        resetGame();
+      }
+    });
   }
+}
+
+function resetGame() {
+  score = 0;
+  turns = 2;
+  document.getElementById("gameOverWindow").classList.add("hidden");
+  location.reload();
 }

@@ -142,7 +142,7 @@ function outPlayer(xPosition) {
 function movePlayer(e) {
   if (gameOver) {
     if (e.code == "Space") {
-      reserGame();
+      resetGame();
       requestAnimationFrame(update);
     }
   }
@@ -204,7 +204,7 @@ function createBlocks() {
   blockCount = blockArray.length;
 }
 
-function reserGame() {
+function resetGame() {
   gameOver = false;
   player = {
     x: boardWidth / 2 - playerWidth / 2,
