@@ -33,7 +33,7 @@ let cactus1Img;
 let cactus2Img;
 let cactus3Img;
 
-//phisics
+//physics
 let velocityX = -8; //cactus moving left speed
 let velocityY = 0;
 let gravity = 0.4;
@@ -68,14 +68,20 @@ window.onload = function () {
 
   requestAnimationFrame(update);
   setInterval(placeCactus, 1000);
+  document.addEventListener("keydown", moveDino);
 };
 
 function update() {
   requestAnimationFrame(update);
+  if (gameOver) {
+    return;
+  }
 
   context.clearRect(0, 0, board.width, board.height);
 
   //dino
+  velocityY += gravity;
+  dino.y = Math.min(dino.y + velocityY, dinoY);
   context.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
 
   //cactus
@@ -92,7 +98,20 @@ function update() {
   }
 }
 
+function moveDino(e) {
+  if (gameOver) {
+    return;
+  }
+
+  if ((e.code == "Space" || e.code == "ArrowUp") && dino.y == dinoY) {
+    velocityY = -10;
+  }
+}
+
 function placeCactus() {
+  if (gameOver) {
+    return;
+  }
   //place cactus
   let cactus = {
     img: null,
