@@ -46,6 +46,11 @@ let gameOverX = boardWidth / 2 - gameOverWidth / 2;
 let gameOverY = boardHeight / 2 - gameOverHeight / 2;
 
 let resetImg;
+let resetImgWidth = 76;
+let resetImgHeight = 68;
+let resetImgX = boardWidth / 2 - resetImgWidth / 2;
+let resetImgY = boardHeight / 2 + gameOverHeight;
+
 let score = 0;
 
 window.onload = function () {
@@ -82,11 +87,52 @@ window.onload = function () {
   requestAnimationFrame(update);
   setInterval(placeCactus, 1000);
   document.addEventListener("keydown", moveDino);
+
+  board.addEventListener("click", function (e) {
+    // Calculate the canvas-relative coordinates of the click
+    let rect = board.getBoundingClientRect();
+    let clickX = e.clientX - rect.left;
+    let clickY = e.clientY - rect.top;
+
+    // Check if the click was within the image's rectangle
+    if (
+      clickX >= resetImgX &&
+      clickX <= resetImgX + resetImgWidth &&
+      clickY >= resetImgY &&
+      clickY <= resetImgY + resetImgHeight
+    ) {
+      reset();
+    }
+  });
+
+  board.addEventListener("mousemove", function (e) {
+    // Calculate the canvas-relative coordinates of the mouse
+    let rect = board.getBoundingClientRect();
+    let mouseX = e.clientX - rect.left;
+    let mouseY = e.clientY - rect.top;
+
+    // Check if the mouse is within the image's rectangle
+    if (
+      mouseX >= resetImgX &&
+      mouseX <= resetImgX + resetImgWidth &&
+      mouseY >= resetImgY &&
+      mouseY <= resetImgY + resetImgHeight
+    ) {
+      board.style.cursor = "pointer"; // Change the cursor to a pointer
+    } else {
+      board.style.cursor = "default"; // Change the cursor back to the default
+    }
+  });
 };
 
 function update() {
   requestAnimationFrame(update);
   if (gameOver) {
+    document.addEventListener("keydown", function (event) {
+      if (event.code === "Space") {
+        reset();
+      }
+    });
     return;
   }
 
@@ -125,6 +171,17 @@ function update() {
           gameOverHeight
         );
       };
+
+      resetImg.src = "./img/reset.png";
+      resetImg.onload = function () {
+        context.drawImage(
+          resetImg,
+          resetImgX,
+          resetImgY,
+          resetImgWidth,
+          resetImgHeight
+        );
+      };
     }
   }
 
@@ -137,6 +194,11 @@ function update() {
 
 function moveDino(e) {
   if (gameOver) {
+    document.addEventListener("keydown", function (event) {
+      if (event.code === "Space") {
+        reset();
+      }
+    });
     return;
   }
 
@@ -147,6 +209,11 @@ function moveDino(e) {
 
 function placeCactus() {
   if (gameOver) {
+    document.addEventListener("keydown", function (event) {
+      if (event.code === "Space") {
+        reset();
+      }
+    });
     return;
   }
   //place cactus
@@ -189,4 +256,8 @@ function detectCollision(a, b) {
     a.y < b.y + b.height &&
     a.y + a.height > b.y
   );
+}
+
+function reset() {
+  location.reload();
 }
