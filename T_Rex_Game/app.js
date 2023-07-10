@@ -202,8 +202,17 @@ function moveDino(e) {
     return;
   }
 
+  // if ((e.code == "Space" || e.code == "ArrowUp") && dino.y == dinoY) {
+  //   velocityY = -10;
+  // }
+
   if ((e.code == "Space" || e.code == "ArrowUp") && dino.y == dinoY) {
-    velocityY = -10;
+    // If Shift is also pressed, make the dino jump higher
+    if (e.shiftKey) {
+      velocityY = -12;
+    } else {
+      velocityY = -10;
+    }
   }
 }
 
