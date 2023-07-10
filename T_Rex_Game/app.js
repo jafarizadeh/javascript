@@ -95,6 +95,14 @@ function update() {
       cactus.width,
       cactus.height
     );
+
+    if (detectCollision(dino, cactus)) {
+      gameOver = true;
+      dinoImg.src = "./img/dino-dead.png";
+      dinoImg.onload = function () {
+        context.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
+      };
+    }
   }
 }
 
@@ -143,4 +151,13 @@ function placeCactus() {
   if (cactusArray.length > 5) {
     cactusArray.shift(); //remove the first element from the array so that the array doesn't constantly grow
   }
+}
+
+function detectCollision(a, b) {
+  return (
+    a.x < b.x + b.width &&
+    a.x + a.width > b.x &&
+    a.y < b.y + b.height &&
+    a.y + a.height > b.y
+  );
 }
