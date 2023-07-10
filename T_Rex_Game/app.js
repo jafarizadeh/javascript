@@ -28,12 +28,14 @@ let bird1Height = 68;
 let bird2Height = 62;
 
 let birdX = 1100;
-let birdY1 = 25;
-let birdY2 = 70;
-let birdY3 = 140;
+let birdY1 = 180;
+let birdY2 = 200;
+let birdY3 = 250;
 
 let bird1Img;
 let bird2Img;
+
+let birdFrame = 0;
 
 //cactus
 let cactusArray = [];
@@ -89,11 +91,17 @@ window.onload = function () {
   board.height = boardHeight;
   board.width = boardWidth;
 
+  requestAnimationFrame(update);
+  setInterval(function () {
+    birdFrame++;
+  }, 100);
+
   context = board.getContext("2d"); //used for drawing on the board
 
   //draw initial dinosaur
   //   context.fillStyle = "green";
   //   context.fillRect(dino.x, dino.y, dino.width, dino.height);
+
   dinoImg = new Image();
   dinoImg.src = "./img/dino.png";
   dinoImg.onload = function () {
@@ -232,9 +240,16 @@ function update() {
   }
 
   //bird
+  // for (let i = 0; i < birdArray.length; i++) {
+  //   let bird = birdArray[i];
+  //   bird.x += velocityX;
+  //   context.drawImage(bird.img, bird.x, bird.y, bird.width, bird.height);
+  // }
+
   for (let i = 0; i < birdArray.length; i++) {
     let bird = birdArray[i];
     bird.x += velocityX;
+    bird.img = birdFrame % 2 === 0 ? bird1Img : bird2Img;
     context.drawImage(bird.img, bird.x, bird.y, bird.width, bird.height);
   }
 
@@ -342,7 +357,7 @@ function placeBird() {
   };
 
   let placeBirdChance = Math.random();
-  if (placeBirdChance > 0.97) {
+  if (placeBirdChance > 0.95) {
     bird.y = birdY3;
     birdArray.push(bird);
   } else if (placeBirdChance > 0.9) {
