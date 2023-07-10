@@ -18,6 +18,23 @@ let dino = {
   height: dinoHeight,
 };
 
+//bird
+let birdArray = [];
+
+let bird1Width = 97;
+let bird2Width = 93;
+
+let bird1Height = 68;
+let bird2Height = 62;
+
+let birdX = 1100;
+let birdY1 = 25;
+let birdY2 = 70;
+let birdY3 = 140;
+
+let bird1Img;
+let bird2Img;
+
 //cactus
 let cactusArray = [];
 
@@ -28,6 +45,7 @@ let cactusBigWidth = 103;
 
 let cactusHeight = 70;
 let bigCactusHeight = 100;
+
 let cactusX = 1100;
 let cactusY = boardHeight - cactusHeight;
 
@@ -94,6 +112,12 @@ window.onload = function () {
   cactusBigImg = new Image();
   cactusBigImg.src = "./img/big-cactus2.png";
 
+  bird1Img = new Image();
+  bird1Img.src = "./img/bird1.png";
+
+  bird2Img = new Image();
+  bird2Img.src = "./img/bird2.png";
+
   cloudImg = new Image();
   cloudImg.src = "./img/cloud.png";
 
@@ -106,6 +130,8 @@ window.onload = function () {
   requestAnimationFrame(update);
   setInterval(placeCactus, 1000);
   setInterval(placeCloud, 1000);
+  setInterval(placeBird, 1000);
+
   document.addEventListener("keydown", moveDino);
 
   board.addEventListener("click", function (e) {
@@ -204,6 +230,15 @@ function update() {
       };
     }
   }
+
+  //bird
+  for (let i = 0; i < birdArray.length; i++) {
+    let bird = birdArray[i];
+    bird.x += velocityX;
+    context.drawImage(bird.img, bird.x, bird.y, bird.width, bird.height);
+  }
+
+  //cloud
   for (let i = 0; i < cloudArray.length; i++) {
     let clouds = cloudArray[i];
     clouds.x += velocityX;
@@ -293,6 +328,33 @@ function placeCactus() {
 
   if (cactusArray.length > 5) {
     cactusArray.shift(); //remove the first element from the array so that the array doesn't constantly grow
+  }
+}
+
+function placeBird() {
+  //place bird
+  let bird = {
+    img: bird1Img,
+    x: birdX,
+    y: null,
+    width: bird1Width,
+    height: bird1Height,
+  };
+
+  let placeBirdChance = Math.random();
+  if (placeBirdChance > 0.97) {
+    bird.y = birdY3;
+    birdArray.push(bird);
+  } else if (placeBirdChance > 0.9) {
+    bird.y = birdY2;
+    birdArray.push(bird);
+  } else if (placeBirdChance > 80) {
+    bird.y = birdY1;
+    birdArray.push(bird);
+  }
+
+  if (birdArray.length > 5) {
+    birdArray.shift(); //remove the first element from the array so that the array doesn't constantly grow
   }
 }
 
