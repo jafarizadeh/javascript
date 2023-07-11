@@ -47,9 +47,9 @@ let bird1Height = 68;
 let bird2Height = 62;
 
 let birdX = 1100;
-let birdY1 = 180;
-let birdY2 = 200;
-let birdY3 = 250;
+let birdY1 = 80;
+let birdY2 = 180;
+let birdY3 = 230;
 
 let bird1Img;
 let bird2Img;
@@ -105,7 +105,9 @@ let resetImgY = boardHeight / 2 + gameOverHeight;
 
 let score = 0;
 
+let gameSpeed = 0.5; // you can modify this value to control the game speed
 let shiftPressed = false;
+let duck = false;
 let dinoImageUpdateTime = Date.now();
 
 window.onload = function () {
@@ -253,7 +255,7 @@ function update() {
   //cactus
   for (let i = 0; i < cactusArray.length; i++) {
     let cactus = cactusArray[i];
-    cactus.x += velocityX;
+    cactus.x += velocityX * gameSpeed;
     context.drawImage(
       cactus.img,
       cactus.x,
@@ -295,13 +297,44 @@ function update() {
   // bird;
   for (let i = 0; i < birdArray.length; i++) {
     let bird = birdArray[i];
-    bird.x += velocityX;
+    bird.x += velocityX * gameSpeed;
     context.drawImage(bird.img, bird.x, bird.y, bird.width, bird.height);
+
+    if (detectCollision(dino, bird)) {
+      if (!duck) {
+        gameOver = true;
+        dinoImg.src = "./img/dino-dead.png";
+        dinoImg.onload = function () {
+          context.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
+        };
+        gameOverImg.src = "./img/game-over.png";
+        gameOverImg.onload = function () {
+          context.drawImage(
+            gameOverImg,
+            gameOverX,
+            gameOverY,
+            gameOverWidth,
+            gameOverHeight
+          );
+        };
+
+        resetImg.src = "./img/reset.png";
+        resetImg.onload = function () {
+          context.drawImage(
+            resetImg,
+            resetImgX,
+            resetImgY,
+            resetImgWidth,
+            resetImgHeight
+          );
+        };
+      }
+    }
   }
 
   for (let i = 0; i < birdArray.length; i++) {
     let bird = birdArray[i];
-    bird.x += velocityX;
+    bird.x += velocityX * gameSpeed;
     bird.img = birdFrame % 2 === 0 ? bird1Img : bird2Img;
     context.drawImage(bird.img, bird.x, bird.y, bird.width, bird.height);
   }
@@ -309,7 +342,7 @@ function update() {
   //cloud
   for (let i = 0; i < cloudArray.length; i++) {
     let clouds = cloudArray[i];
-    clouds.x += velocityX;
+    clouds.x += velocityX * gameSpeed;
     context.drawImage(
       clouds.img,
       clouds.x,
@@ -337,14 +370,15 @@ function moveDino(e) {
   }
 
   // Track the state of the Shift key
-  if (e.code == "ShiftLeft" || e.code == "ShiftRight") {
+  if (e.code == "KeyZ") {
     shiftPressed = e.type == "keydown";
+    duck = e.type == "keydown";
   }
 
   if ((e.code == "Space" || e.code == "ArrowUp") && dino.y == dinoY) {
     // If Shift is also pressed, make the dino jump higher
     if (e.shiftKey) {
-      velocityY = -12;
+      velocityY = -14;
     } else {
       velocityY = -10;
     }
@@ -368,35 +402,36 @@ function placeCactus() {
     width: null,
     height: null,
   };
+  if (score > 700) {
+    let placeCactusChance = Math.random();
+    if (placeCactusChance > 0.95) {
+      cactus.img = cactusBigImg;
+      cactus.width = cactusBigWidth;
+      cactus.height = bigCactusHeight;
+      cactusArray.push(cactus);
+    } else if (placeCactusChance > 0.85) {
+      //15% chance
+      cactus.img = cactus3Img;
+      cactus.width = cactus3Width;
+      cactus.height = cactusHeight;
+      cactusArray.push(cactus);
+    } else if (placeCactusChance > 0.7) {
+      //30% chance
+      cactus.img = cactus2Img;
+      cactus.width = cactus2Width;
+      cactus.height = cactusHeight;
+      cactusArray.push(cactus);
+    } else if (placeCactusChance > 0.5) {
+      //50% chance
+      cactus.img = cactus1Img;
+      cactus.width = cactus1Width;
+      cactus.height = cactusHeight;
+      cactusArray.push(cactus);
+    }
 
-  let placeCactusChance = Math.random();
-  if (placeCactusChance > 0.95) {
-    cactus.img = cactusBigImg;
-    cactus.width = cactusBigWidth;
-    cactus.height = bigCactusHeight;
-    cactusArray.push(cactus);
-  } else if (placeCactusChance > 0.85) {
-    //15% chance
-    cactus.img = cactus3Img;
-    cactus.width = cactus3Width;
-    cactus.height = cactusHeight;
-    cactusArray.push(cactus);
-  } else if (placeCactusChance > 0.7) {
-    //30% chance
-    cactus.img = cactus2Img;
-    cactus.width = cactus2Width;
-    cactus.height = cactusHeight;
-    cactusArray.push(cactus);
-  } else if (placeCactusChance > 0.5) {
-    //50% chance
-    cactus.img = cactus1Img;
-    cactus.width = cactus1Width;
-    cactus.height = cactusHeight;
-    cactusArray.push(cactus);
-  }
-
-  if (cactusArray.length > 5) {
-    cactusArray.shift(); //remove the first element from the array so that the array doesn't constantly grow
+    if (cactusArray.length > 5) {
+      cactusArray.shift(); //remove the first element from the array so that the array doesn't constantly grow
+    }
   }
 }
 
@@ -409,21 +444,22 @@ function placeBird() {
     width: bird1Width,
     height: bird1Height,
   };
+  if (score > 2500) {
+    let placeBirdChance = Math.random();
+    if (placeBirdChance > 0.95) {
+      bird.y = birdY3;
+      birdArray.push(bird);
+    } else if (placeBirdChance > 0.9) {
+      bird.y = birdY2;
+      birdArray.push(bird);
+    } else if (placeBirdChance > 0.7) {
+      bird.y = birdY1;
+      birdArray.push(bird);
+    }
 
-  let placeBirdChance = Math.random();
-  if (placeBirdChance > 0.95) {
-    bird.y = birdY3;
-    birdArray.push(bird);
-  } else if (placeBirdChance > 0.9) {
-    bird.y = birdY2;
-    birdArray.push(bird);
-  } else if (placeBirdChance > 80) {
-    bird.y = birdY1;
-    birdArray.push(bird);
-  }
-
-  if (birdArray.length > 5) {
-    birdArray.shift(); //remove the first element from the array so that the array doesn't constantly grow
+    if (birdArray.length > 5) {
+      birdArray.shift(); //remove the first element from the array so that the array doesn't constantly grow
+    }
   }
 }
 
@@ -450,7 +486,7 @@ function placeCloud() {
     if (placeCloudChance > 0.95) {
       cloud.y = cloudY1;
       cloudArray.push(cloud);
-    } else if (placeCloudChance > 85) {
+    } else if (placeCloudChance > 0.85) {
       cloud.y = cloudY2;
       cloudArray.push(cloud);
     } else {
