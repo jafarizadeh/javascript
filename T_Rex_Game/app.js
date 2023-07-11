@@ -1,3 +1,5 @@
+let test = 5;
+
 //board
 let board;
 let boardWidth = 1125; //750
@@ -5,6 +7,9 @@ let boardHeight = 375; //250
 let context;
 
 //dino
+let dinoImages = [];
+let currentDinoImageIndex = 0;
+
 let dinoWidth = 88;
 let dinoHeight = 94;
 let dinoX = 75; //50
@@ -34,6 +39,7 @@ let dinoDuck = {
   height: dinoDuckHeight,
 };
 
+let duck = false;
 //bird
 let birdArray = [];
 
@@ -103,6 +109,7 @@ let resetImgY = boardHeight / 2 + gameOverHeight;
 let score = 0;
 
 let shiftPressed = false;
+let dinoImageUpdateTime = Date.now();
 
 window.onload = function () {
   board = document.getElementById("board");
@@ -127,31 +134,11 @@ window.onload = function () {
     context.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
   };
 
-  dinoDuck1Img = new Image();
-  dinoDuck1Img.src = "./img/dino-duck1.png";
+  dinoImages[0] = new Image();
+  dinoImages[0].src = "./img/dino-duck1.png";
 
-  dinoDuck1Img.onload = function () {
-    context.drawImage(
-      dinoDuck1Img,
-      dinoDuck.x,
-      dinoDuck.y,
-      dinoDuck.width1,
-      dinoDuck.height
-    );
-  };
-
-  dinoDuck2Img = new Image();
-  dinoDuck2Img.src = "./img/dino-duck2.png";
-
-  dinoDuck2Img.onload = function () {
-    context.drawImage(
-      dinoDuck2Img,
-      dinoDuck.x,
-      dinoDuck.y,
-      dinoDuck.width2,
-      dinoDuck.height
-    );
-  };
+  dinoImages[1] = new Image();
+  dinoImages[1].src = "./img/dino-duck2.png";
 
   cactus1Img = new Image();
   cactus1Img.src = "./img/cactus1.png";
@@ -230,6 +217,7 @@ window.onload = function () {
 
 function update() {
   requestAnimationFrame(update);
+
   if (gameOver) {
     document.addEventListener("keydown", function (event) {
       if (event.code === "Space") {
@@ -240,18 +228,30 @@ function update() {
   }
 
   context.clearRect(0, 0, board.width, board.height);
-
   // Draw the dino
   if (shiftPressed) {
     // You'll need to implement tracking of Shift key state
+    duck = true;
     context.drawImage(
-      dinoDuck1Img,
+      dinoImages[currentDinoImageIndex],
       dinoDuck.x,
       dinoDuck.y,
       dinoDuck.width1,
       dinoDuck.height
     );
+    test++;
+    console.log(test);
+
+    // If it's time to update the image
+    if (Date.now() >= dinoImageUpdateTime) {
+      // Update the image
+      currentDinoImageIndex = (currentDinoImageIndex + 1) % dinoImages.length;
+
+      // Set the next update time to be 100 milliseconds in the future
+      dinoImageUpdateTime = Date.now() + 100;
+    }
   } else {
+    duck = false;
     velocityY += gravity;
     dino.y = Math.min(dino.y + velocityY, dinoY);
     context.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
@@ -346,7 +346,6 @@ function moveDino(e) {
   // Track the state of the Shift key
   if (e.code == "ShiftLeft" || e.code == "ShiftRight") {
     shiftPressed = e.type == "keydown";
-    console.log(shiftPressed);
   }
 
   if ((e.code == "Space" || e.code == "ArrowUp") && dino.y == dinoY) {
