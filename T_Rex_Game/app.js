@@ -4,6 +4,14 @@ let boardWidth = 1125; //750
 let boardHeight = 375; //250
 let context;
 
+//track
+let trackImg;
+let trackWidth = 1125;
+let trackHeight = 13;
+let trackX = 0;
+// let trackY = boardHeight - trackHeight;
+let trackY = 200;
+
 //dino
 let dinoImages = [];
 let currentDinoImageIndex = 0;
@@ -126,6 +134,9 @@ window.onload = function () {
   //   context.fillStyle = "green";
   //   context.fillRect(dino.x, dino.y, dino.width, dino.height);
 
+  trackImg = new Image();
+  trackImg.src = "./img/track.png";
+
   dinoImg = new Image();
   dinoImg.src = "./img/dino.png";
 
@@ -227,6 +238,7 @@ function update() {
   }
 
   context.clearRect(0, 0, board.width, board.height);
+
   // Draw the dino
   if (shiftPressed) {
     // You'll need to implement tracking of Shift key state
