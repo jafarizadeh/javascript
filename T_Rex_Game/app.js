@@ -1,5 +1,3 @@
-let test = 5;
-
 //board
 let board;
 let boardWidth = 1125; //750
@@ -39,7 +37,6 @@ let dinoDuck = {
   height: dinoDuckHeight,
 };
 
-let duck = false;
 //bird
 let birdArray = [];
 
@@ -231,7 +228,6 @@ function update() {
   // Draw the dino
   if (shiftPressed) {
     // You'll need to implement tracking of Shift key state
-    duck = true;
     context.drawImage(
       dinoImages[currentDinoImageIndex],
       dinoDuck.x,
@@ -239,8 +235,6 @@ function update() {
       dinoDuck.width1,
       dinoDuck.height
     );
-    test++;
-    console.log(test);
 
     // If it's time to update the image
     if (Date.now() >= dinoImageUpdateTime) {
@@ -251,7 +245,6 @@ function update() {
       dinoImageUpdateTime = Date.now() + 100;
     }
   } else {
-    duck = false;
     velocityY += gravity;
     dino.y = Math.min(dino.y + velocityY, dinoY);
     context.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
