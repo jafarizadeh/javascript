@@ -95,9 +95,9 @@ function update() {
         }
       }
       context.drawImage(alienImg, alien.x, alien.y, alien.width, alien.height);
-      
-      if (alien.y >= ship.y){
-      	gameOver = true;
+
+      if (alien.y >= ship.y) {
+        gameOver = true;
       }
     }
   }
@@ -109,13 +109,14 @@ function update() {
     context.fillStyle = "white";
     context.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
 
-    //bullet colision with aliens
+    //bullet collision with aliens
     for (let j = 0; j < alienArray.length; j++) {
       let alien = alienArray[j];
       if (!bullet.used && alien.alive && detectCollision(bullet, alien)) {
         bullet.used = true;
         alien.alive = false;
         alienCount--;
+        score += 100;
       }
     }
   }
@@ -138,6 +139,11 @@ function update() {
     bulletArray = [];
     createAliens();
   }
+  
+  //score
+  context.fillStyle = "white";
+  context.font = "16px courier";
+  context.fillText(score, 5, 20);
 }
 
 function moveShip(e) {
@@ -172,9 +178,6 @@ function createAliens() {
 }
 
 function shoot(e) {
-if (gameOver) {
-    return;
-  }
   if (e.code == "Space") {
     //shoot
     let bullet = {
