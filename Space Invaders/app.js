@@ -37,6 +37,10 @@ let alienColumns = 3;
 let alienCount = 0; //number of aliens to defeat
 let alienVelocityX = 1; //alien moving speed
 
+//bullets
+let bulletArray = [];
+let bulletVelocityY = -10; //bullet moving speed
+
 window.onload = function () {
   board = document.getElementById("board");
   board.width = boardWidth;
@@ -56,6 +60,7 @@ window.onload = function () {
 
   requestAnimationFrame(update);
   document.addEventListener("keydown", moveShip);
+  document.addEventListener("keyup", shoot);
 };
 
 function update() {
@@ -70,14 +75,28 @@ function update() {
   for (let i = 0; i < alienArray.length; i++) {
     let alien = alienArray[i];
     if (alien.alive) {
-    	alien.x += alienVelocityX;
-    	
-    	//if alien touches the boarder
-    	if (alien.x + alien.width >= board.width || alien.x <= 0){
-    		alienVelocityX *= -1;
-    	}
+      alien.x += alienVelocityX;
+
+      //if alien touches the boarder
+      if (alien.x + alien.width >= board.width || alien.x <= 0) {
+        alienVelocityX *= -1;
+        alien.x += alienVelocityX * 2;
+
+        // move all aliens up by one row
+        for (let j = 0; j < alienArray.length; j++) {
+          alienArray[j].y += alienHeight;
+        }
+      }
       context.drawImage(alienImg, alien.x, alien.y, alien.width, alien.height);
     }
+  }
+
+  //bullets
+  for (let i = 0; i < bulletArray.length; i++) {
+    let bullet = bulletArray[i];
+    bullet.y += bulletVelocityY;
+    context.fillStyle = "white";
+    context.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
   }
 }
 
@@ -107,4 +126,18 @@ function createAliens() {
     }
   }
   alienCount = alienArray.length;
+}
+
+function shoot(e) {
+  if (e.code == "Space") {
+    //shoot
+    let bullet = {
+      x: ship.x + shipWidth / 2,
+      y: ship.y,
+      width: tileSize / 8,
+      height: tileSize / 2,
+      used: false,
+    };
+    bulletArray.push(bullet);
+  }
 }
