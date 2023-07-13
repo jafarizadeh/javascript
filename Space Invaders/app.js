@@ -60,11 +60,38 @@ window.onload = function () {
 
   alienImg = new Image();
   alienImg.src = "./alien.png";
-  createAliens();
+  alienImg.onload = function () {
+    createAliens();
+  };
+
+  let newAlienImages = []; // array to store the new alien images
+
+  let alienMagentaImg = new Image();
+  alienMagentaImg.src =
+    "./alien-magenta.png?cacheBuster=" + new Date().getTime();
+  newAlienImages.push(alienMagentaImg); // add image to array
+
+  let alienCyanImg = new Image();
+  alienCyanImg.src = "./alien-cyan.png?cacheBuster=" + new Date().getTime();
+  newAlienImages.push(alienCyanImg); // add image to array
+
+  let alienYellowImg = new Image();
+  alienYellowImg.src = "./alien-yellow.png?cacheBuster=" + new Date().getTime();
+  newAlienImages.push(alienYellowImg); // add image to array
+
+  // createAliens();
 
   requestAnimationFrame(update);
   document.addEventListener("keydown", moveShip);
   document.addEventListener("keyup", shoot);
+
+  setInterval(function () {
+    // every 10 seconds
+    let randomAlien = alienArray[Math.floor(Math.random() * alienArray.length)]; // get random alien
+    let randomImage =
+      newAlienImages[Math.floor(Math.random() * newAlienImages.length)]; // get random image
+    randomAlien.img = randomImage; // replace image of alien with new image
+  }, 10000); // 10000 milliseconds = 10 seconds
 };
 
 function update() {
@@ -94,7 +121,16 @@ function update() {
           alienArray[j].y += alienHeight;
         }
       }
-      context.drawImage(alienImg, alien.x, alien.y, alien.width, alien.height);
+
+      if (alien.alive && alien.img instanceof Image) {
+        context.drawImage(
+          alien.img,
+          alien.x,
+          alien.y,
+          alien.width,
+          alien.height
+        );
+      }
 
       if (alien.y >= ship.y) {
         gameOver = true;
@@ -129,9 +165,9 @@ function update() {
     bulletArray.shift(); //remove the first element of the array
   }
 
-  //next lavel
+  //next level
   if (alienCount == 0) {
-    //increas the number of aliens in columns and rows by 1
+    //increase the number of aliens in columns and rows by 1
     alienColumns = Math.min(alienColumns + 1, columns / 2 + 2); //cap at 16/2 - 2 = 6
     alienRows = Math.min(alienRows + 1, rows - 4); //cap at 16 - 4 = 12
     alienVelocityX += 0.2; //increase the alien movement speed
@@ -139,7 +175,7 @@ function update() {
     bulletArray = [];
     createAliens();
   }
-  
+
   //score
   context.fillStyle = "white";
   context.font = "16px courier";
