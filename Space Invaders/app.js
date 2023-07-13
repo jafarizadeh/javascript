@@ -1,4 +1,4 @@
-//board
+// board
 let tileSize = 32;
 let rows = 16;
 let columns = 16;
@@ -34,17 +34,14 @@ let alienImg;
 
 let alienRows = 2;
 let alienColumns = 3;
-let alienCount = 0; // number of aliens to defeat
+let alienCount = 0; //number of aliens to defeat
+let alienVelocityX = 1; //alien moving speed
 
 window.onload = function () {
   board = document.getElementById("board");
   board.width = boardWidth;
   board.height = boardHeight;
   context = board.getContext("2d"); //used for drawing on the board
-
-  //draw initial ship
-  //   context.fillStyle = "green";
-  //   context.fillRect(ship.x, ship.y, ship.width, ship.height);
 
   //load images
   shipImg = new Image();
@@ -69,10 +66,16 @@ function update() {
   //ship
   context.drawImage(shipImg, ship.x, ship.y, ship.width, ship.height);
 
-  //alien
+  //aliens
   for (let i = 0; i < alienArray.length; i++) {
     let alien = alienArray[i];
     if (alien.alive) {
+    	alien.x += alienVelocityX;
+    	
+    	//if alien touches the boarder
+    	if (alien.x + alien.width >= board.width || alien.x <= 0){
+    		alienVelocityX *= -1;
+    	}
       context.drawImage(alienImg, alien.x, alien.y, alien.width, alien.height);
     }
   }
@@ -80,12 +83,12 @@ function update() {
 
 function moveShip(e) {
   if (e.code == "ArrowLeft" && ship.x - shipVelocityX >= 0) {
-    ship.x -= shipVelocityX; //move left one tile
+    ship.x -= shipVelocityX; //move left
   } else if (
-    e.code == "ArrowRight" &&
+    e.code === "ArrowRight" &&
     ship.x + shipVelocityX + ship.width <= board.width
   ) {
-    ship.x += shipVelocityX; //move right one tile
+    ship.x += shipVelocityX; //move right
   }
 }
 
@@ -100,7 +103,6 @@ function createAliens() {
         height: alienHeight,
         alive: true,
       };
-
       alienArray.push(alien);
     }
   }
